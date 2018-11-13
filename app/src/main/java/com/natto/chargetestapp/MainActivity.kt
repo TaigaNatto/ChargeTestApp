@@ -3,25 +3,25 @@ package com.natto.chargetestapp
 import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.natto.chargetestapp.R
-import com.natto.billing.IInAppBillingService
 import android.os.IBinder
 import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
-import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
 import android.view.View
 import android.app.PendingIntent
+import android.util.Log
 import android.widget.Toast
+import com.android.vending.billing.IInAppBillingService
 import org.json.JSONException
 import org.json.JSONObject
-
-
 
 class MainActivity : AppCompatActivity() {
 
   var mService: IInAppBillingService? = null
+
+  val normalItems= arrayListOf(arrayOf("item_banana_1_normal","200"))
+  val premiumItems= arrayListOf(arrayOf("item_banana_1","100"))
 
   var mServiceConn: ServiceConnection = object : ServiceConnection {
     override fun onServiceDisconnected(name: ComponentName) {
@@ -58,24 +58,24 @@ class MainActivity : AppCompatActivity() {
           val jo = JSONObject(purchaseData)
           val productId = jo.getString("productId")
 
-          Toast.makeText(this,"購入成功しました",Toast.LENGTH_SHORT).show()
+          Toast.makeText(this, "購入成功しました", Toast.LENGTH_SHORT).show()
           // 購入成功後すぐに消費する
           // use();
         } catch (e: JSONException) {
-          Toast.makeText(this,"Failed to parse purchase data.",Toast.LENGTH_SHORT).show()
+          Toast.makeText(this, "Failed to parse purchase data.", Toast.LENGTH_SHORT).show()
           e.printStackTrace()
         }
       } else {
-        Toast.makeText(this,"課金に失敗しました",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "課金に失敗しました", Toast.LENGTH_SHORT).show()
       }
     }
   }
 
-  fun buy(v: View){
+  fun buy() {
     try {
       // 購入リクエストの送信
       // item001 はGoogle Play Developer Consoleで作成した値を使う
-      val buyIntentBundle = mService?.getBuyIntent(3, packageName, "item001", "inapp", "hoge")
+      val buyIntentBundle = mService?.getBuyIntent(3, packageName, "item_banana_1", "inapp", "hoge")
       // レスポンスコードを取得する
       val response = buyIntentBundle?.getInt("RESPONSE_CODE")
       // 購入可能
@@ -92,18 +92,19 @@ class MainActivity : AppCompatActivity() {
             Integer.valueOf(0),
             Integer.valueOf(0))
       } else if (response == 1) {
-        Toast.makeText(this,"購入がキャンセルされた",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "購入がキャンセルされた", Toast.LENGTH_SHORT).show()
       } else if (response == 7) {
-        Toast.makeText(this,"既に同じものを購入している",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "既に同じものを購入している", Toast.LENGTH_SHORT).show()
       }// BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED
       // BILLING_RESPONSE_RESULT_USER_CANCELED
     } catch (e: Exception) {
       e.printStackTrace()
-      Toast.makeText(this,"購入は失敗した",Toast.LENGTH_SHORT).show()
+      Log.d("EEE", e.message)
+      Toast.makeText(this, "購入は失敗した", Toast.LENGTH_SHORT).show()
     }
   }
 
-  fun use(v:View){
+  fun use() {
     try {
       // 購入したものを全て消費する
       val ownedItems = mService?.getPurchases(3, packageName, "inapp", null)
@@ -126,9 +127,9 @@ class MainActivity : AppCompatActivity() {
 
           // 正常終了
           if (response == 0) {
-            Toast.makeText(this,"$productId + \"を消費しました。\"",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$productId + \"を消費しました。\"", Toast.LENGTH_SHORT).show()
           } else {
-            Toast.makeText(this, purchaseData,Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, purchaseData, Toast.LENGTH_SHORT).show()
           }
         }
       }
@@ -137,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  fun check(v:View){
+  fun check() {
     try {
       // 購入したものを確認する
       val ownedItems = mService?.getPurchases(3, packageName, "inapp", null)
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity() {
           val productId = `object`.getString("productId")
           val purchaseToken = `object`.getString("purchaseToken")
 
-          Toast.makeText(this, "$productId,$purchaseToken",Toast.LENGTH_SHORT).show()
+          Toast.makeText(this, "$productId,$purchaseToken", Toast.LENGTH_SHORT).show()
         }
       }
     } catch (e: Exception) {
