@@ -9,14 +9,17 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
-
     startKoin(
         this, listOf(this.billingModule)
     )
   }
 
   private val billingModule: Module = applicationContext {
-    //todo ここで端末ごとに課金処理を変える
-    factory { AmazonStoreBillingAction() as BillingActionContract }
+    //FireのみAmazonAppStoreのIAPを使用
+    if (DeviceConfig.isFireTab()) {
+      factory { AmazonStoreBillingAction() as BillingActionContract }
+    } else {
+      factory { PlayStoreBillingAction() as BillingActionContract }
+    }
   }
 }

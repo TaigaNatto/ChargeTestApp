@@ -8,8 +8,6 @@ import com.amazon.device.iap.model.UserDataResponse
 import com.amazon.device.iap.PurchasingService
 import com.amazon.device.iap.model.Receipt
 
-
-
 class AmazonPurchasingListener : PurchasingListener {
 
   /**

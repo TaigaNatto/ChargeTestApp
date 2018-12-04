@@ -3,13 +3,15 @@ package com.natto.chargetest
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.os.Build
 import android.view.View
+import android.widget.Toast
 import com.natto.chargetestapp.BillingActionContract
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
-  //playstoreかamazonのアクションクラスがはいる
+  //端末によってplaystoreかamazonのアクションクラスがはいる
   private val billingAction: BillingActionContract by inject()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +32,10 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun buy(v: View) {
-    billingAction.buy(this,"item001")
+    billingAction.buy(this, "item001")
   }
 
   fun use(v: View) {
-    billingAction.use(this,"item001")
+    billingAction.use(this, "item001")
   }
 }
