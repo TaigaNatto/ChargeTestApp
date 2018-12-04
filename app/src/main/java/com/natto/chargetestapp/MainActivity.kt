@@ -3,9 +3,7 @@ package com.natto.chargetest
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import android.os.Build
 import android.view.View
-import android.widget.Toast
 import com.natto.chargetestapp.BillingActionContract
 import org.koin.android.ext.android.inject
 
@@ -17,13 +15,11 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-
     billingAction.start(this)
   }
 
   public override fun onDestroy() {
     super.onDestroy()
-
     billingAction.end(this)
   }
 
