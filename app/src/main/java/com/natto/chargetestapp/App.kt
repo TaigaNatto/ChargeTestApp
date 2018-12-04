@@ -17,6 +17,6 @@ class App : Application() {
 
   private val billingModule: Module = applicationContext {
     //todo ここで端末ごとに課金処理を変える
-    factory { PlayStoreBillingAction() as BillingActionContract }
+    factory { AmazonStoreBillingAction() as BillingActionContract }
   }
 }

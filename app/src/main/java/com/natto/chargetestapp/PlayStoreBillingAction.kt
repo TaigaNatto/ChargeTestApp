@@ -34,7 +34,7 @@ class PlayStoreBillingAction : BillingActionContract {
     context.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE)
   }
 
-  override fun use(context: Context) {
+  override fun use(context: Context,id:String) {
     try {
       // 購入したものを全て消費する
       val ownedItems = mService?.getPurchases(3, context.packageName, "inapp", null)
@@ -68,11 +68,11 @@ class PlayStoreBillingAction : BillingActionContract {
     }
   }
 
-  override fun buy(context: Context) {
+  override fun buy(context: Context,id:String) {
     try {
       // 購入リクエストの送信
       // item001 はGoogle Play Developer Consoleで作成した値を使う
-      val buyIntentBundle = mService?.getBuyIntent(3, context.packageName, "item001", "inapp",
+      val buyIntentBundle = mService?.getBuyIntent(3, context.packageName, id, "inapp",
           "hoge")
       // レスポンスコードを取得する
       val response = buyIntentBundle?.getInt("RESPONSE_CODE")

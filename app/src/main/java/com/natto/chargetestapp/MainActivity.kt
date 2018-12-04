@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun buy(v: View) {
-    billingAction.buy(this)
+    billingAction.buy(this,"item001")
   }
 
   fun use(v: View) {
-    billingAction.use(this)
+    billingAction.use(this,"item001")
   }
 }
